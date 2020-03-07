@@ -13,11 +13,18 @@ class Cache {
 
   static get(String key){
     var cacheEntry = _cache[key];
-    if (cacheEntry != null && DateTime.now().difference(cacheEntry.addDate) <= _expirationDuration)
+    if (cacheEntry != null && DateTime.now().difference(cacheEntry.addDate) <= _expirationDuration) {
+      print('LOG: getting ' + key + ' from cache');
       return cacheEntry.data;
+    }
     return null;
   }
+
   static void add(String key, Object data) {
     _cache[key] = new CacheEntry(data);
+  }
+
+  static void remove(String key) {
+    _cache.remove(key);
   }
 }

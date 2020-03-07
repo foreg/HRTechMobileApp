@@ -19,12 +19,17 @@ class _MainPageState extends State<MainPage> {
   Future<ClockInOut> _clockInOut;
   Timer _timer;
   Duration _start;
-  int currentPage = 0;
 
   @override
   void initState() {
     _clockInOut = ApiRequests.getEmployeeCurrentStatus();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void startTimer() {
@@ -33,27 +38,8 @@ class _MainPageState extends State<MainPage> {
       oneSec,
       (Timer timer) => setState(() {
         _start = _start + oneSec;
-        print(_start);
         },
       ),
-    );
-  }
-
-  _getPage(int page) {
-    switch (page) {
-      case 0:
-        return Container(color: Colors.red);
-      case 1:
-        return _getMainPage();
-      case 2:
-        return Container(color: Colors.blue);
-    }
-  }
-
-  Widget _getMainPage() {
-    return FutureBuilder(
-      future: _clockInOut,
-      builder: (context, snapshot) => getClockInOutButton(snapshot),
     );
   }
 
@@ -74,7 +60,7 @@ class _MainPageState extends State<MainPage> {
   Widget buildClockInOutButton(ClockInOut clockInOut) {
     return Center(
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => _onTap(),
         child: ClipOval(
           child: Container(
             color: (clockInOut != null && clockInOut.type) ? Colors.green : Colors.red,
@@ -102,36 +88,24 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+  void _onTap() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
+    ApiRequests.addClockInOut().then((_) => {
+      setState(() {        
+        _clockInOut = ApiRequests.getEmployeeCurrentStatus();
+      })
+    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Fancy Bottom Navigation"),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Center(
-          child: _getPage(currentPage),
-        ),
-      ),
-      bottomNavigationBar: FancyBottomNavigation(
-        tabs: [
-          TabData(iconData: Icons.home, title: "Home"),
-          TabData(iconData: Icons.search, title: "Search"),
-          TabData(iconData: Icons.shopping_cart, title: "Basket")
-        ],
-        onTabChangedListener: (position) {
-          setState(() {
-            currentPage = position;
-          });
-        },
-      ),
+    return FutureBuilder(
+      future: _clockInOut,
+      builder: (context, snapshot) => getClockInOutButton(snapshot),
     );
   }
 }

@@ -12,7 +12,6 @@ class ApiRequests {
   static Future<ClockInOut> getEmployeeCurrentStatus() async {
     ClockInOut cachedResponse = Cache.get('getEmployeeCurrentStatus');
     if (cachedResponse != null) {
-      print('cachedResponse');
       return cachedResponse;
     }
     final response = await http.get(host + 'getEmployeeCurrentStatus', headers: {
@@ -21,6 +20,14 @@ class ApiRequests {
     ClockInOut clockInOut = ClockInOut.fromJson(json.decode(response.body)['data']);
     Cache.add('getEmployeeCurrentStatus', clockInOut);
     return clockInOut;
+  }
+
+  static Future<void> addClockInOut() async {
+    Cache.remove('getEmployeeCurrentStatus');
+    var response = await http.post(host + 'clockInOuts', headers: {
+      'Authorization': 'Bearer $token',
+    });
+    return response;
   }
 
   // static void getToken() async {

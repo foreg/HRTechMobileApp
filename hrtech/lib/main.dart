@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hrtech/BottomNavigation.dart';
 
-import 'MainPage.dart';
-import 'Routes.dart';
+import 'package:hrtech/Routes.dart';
 
 void main() {
   Routes.initRoutes();
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HR Tech',
-      home: MainPage(),
+      home: BottomNavigation(),
     );
   }
 }
