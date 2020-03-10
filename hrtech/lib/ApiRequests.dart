@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hrtech/Cache.dart';
 import 'package:hrtech/models/ClockInOut.dart';
+import 'package:hrtech/models/EmployeeWorkTime.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequests {
@@ -28,6 +29,34 @@ class ApiRequests {
       'Authorization': 'Bearer $token',
     });
     return response;
+  }
+
+  static Future<EmployeeWorkTime> getEmployeeWorkTime(String step, DateTime startDate) async {
+    String startDateString = startDate.toIso8601String();
+    String request = 'getEmployeeWorkTime' + '?' + 'step=$step&startDate=$startDateString';
+    var date;
+    switch (step) {
+      case 'week':
+        date = startDate.year.toString() + '-' +  startDate.month.toString() + '-' +  startDate.day.toString();
+        break;
+      case 'month':
+        date = startDate.year.toString() + '-' +  startDate.month.toString();
+        break;
+      default: 
+        date = startDate.year.toString();
+    }
+    String cacheKey = 'getEmployeeWorkTime' + '?' + 'step=$step&startDate=$date';
+    EmployeeWorkTime cachedResponse = Cache.get(cacheKey);
+    if (cachedResponse != null) {
+      return cachedResponse;
+    }
+    final response = await http.get(host + request, headers: {
+      'Authorization': 'Bearer $token',
+    });
+    print(host + cacheKey);
+    EmployeeWorkTime employeeWorkTime = EmployeeWorkTime.fromJson(json.decode(response.body)['data']);
+    Cache.add(cacheKey, employeeWorkTime);
+    return employeeWorkTime;
   }
 
   // static void getToken() async {

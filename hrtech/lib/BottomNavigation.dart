@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
 import 'package:hrtech/MainPage.dart';
+import 'package:hrtech/WorkTime.dart';
 
 
 class BottomNavigation extends StatefulWidget {
@@ -15,7 +16,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   _getPage(int page) {
     switch (page) {
       case 0:
-        return Container(color: Colors.red);
+        return WorkTime();
       case 1:
         return MainPage();
       case 2:
