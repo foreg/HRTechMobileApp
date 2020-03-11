@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:hrtech/BarChart.dart';
+import 'package:hrtech/WorkTimeChart.dart';
 
 class WorkTime extends StatefulWidget {
   @override
