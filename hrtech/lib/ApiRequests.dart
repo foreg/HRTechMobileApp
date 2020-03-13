@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:hrtech/Cache.dart';
 import 'package:hrtech/models/ClockInOut.dart';
 import 'package:hrtech/models/EmployeeWorkTime.dart';
+import 'package:hrtech/models/PayStats.dart';
+import 'package:hrtech/models/Reason.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequests {
@@ -57,6 +59,40 @@ class ApiRequests {
     EmployeeWorkTime employeeWorkTime = EmployeeWorkTime.fromJson(json.decode(response.body)['data']);
     Cache.add(cacheKey, employeeWorkTime);
     return employeeWorkTime;
+  }
+
+  static Future<bool> getIsExplanationLetter() async {
+    await Future.delayed(Duration(seconds: 2)); // TODO remove this line
+    return true;
+  }
+
+  static Future<List<Reason>> getReasons() async {
+    await Future.delayed(Duration(seconds: 2)); // TODO remove this line
+    return [Reason(id: 1, name: 'первая'), Reason(id: 2, name: 'вторая'),];
+  }
+
+  static Future<void> addExplanationLetter(String description, int reasonId) async {
+    var response = await http.post(host + 'explanationLetters', headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    }, body: jsonEncode({
+      'description': description,
+      'reason_id': reasonId
+    }));
+    return response;
+  }
+
+  static Future<PayStats> getEmployeePayStats() async {
+    PayStats cachedResponse = Cache.get('getEmployeePayStats');
+    if (cachedResponse != null) {
+      return cachedResponse;
+    }
+    final response = await http.get(host + 'getEmployeePayStats', headers: {
+      'Authorization': 'Bearer $token',
+    });
+    PayStats payStats = PayStats.fromJson(json.decode(response.body)['data']);
+    Cache.add('getEmployeePayStats', payStats);
+    return payStats;
   }
 
   // static void getToken() async {

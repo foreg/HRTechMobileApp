@@ -85,7 +85,7 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         catdTitle = DateFormat('MMM y', 'ru').format(rangeStart);
         break;
       case 'year':
-        intervalY = 4;
+        intervalY = 40;
         rotateAngle = 0;
         catdTitle = DateFormat('y', 'ru').format(rangeStart);
         break;
@@ -217,7 +217,7 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          textStyle: TextStyle( color: const Color(0xff7589a2), fontWeight: FontWeight.bold, fontSize: 20),
+          textStyle: TextStyle( color: const Color(0xff7589a2), fontWeight: FontWeight.bold, fontSize: 16),
           margin: 16,
           reservedSize: 14,
           getTitles: (value) {

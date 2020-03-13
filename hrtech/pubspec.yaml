@@ -33,6 +33,7 @@ dependencies:
   fl_chart: ^0.8.3
   auto_size_text: 2.1.0
   date_util: 0.1.4
+  direct_select_flutter: 1.0.5
 
 dev_dependencies:
   flutter_test:

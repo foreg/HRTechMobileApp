@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
 import 'package:hrtech/MainPage.dart';
+import 'package:hrtech/PayStatsPage.dart';
 import 'package:hrtech/WorkTime.dart';
 
 
@@ -11,7 +12,7 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  int currentPage = 0;
+  int currentPage = 1;
 
   _getPage(int page) {
     switch (page) {
@@ -20,7 +21,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 1:
         return MainPage();
       case 2:
-        return Container(color: Colors.blue);
+        return PayStatsPage();
     }
   }
 
@@ -37,6 +38,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         ),
       ),
       bottomNavigationBar: FancyBottomNavigation(
+        initialSelection: 1,
         tabs: [
           TabData(iconData: Icons.home, title: "Home"),
           TabData(iconData: Icons.search, title: "Search"),

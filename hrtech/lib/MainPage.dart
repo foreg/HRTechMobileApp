@@ -8,7 +8,7 @@ import 'package:hrtech/Preloader.dart';
 import 'package:intl/intl.dart';
 import 'package:hrtech/ApiRequests.dart';
 import 'package:hrtech/models/ClockInOut.dart';
-import 'Routes.dart';
+import 'package:hrtech/Routes.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -17,12 +17,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   Future<ClockInOut> _clockInOut;
+  Future<bool> _isExplanationLetter;
   Timer _timer;
   Duration _start;
 
   @override
   void initState() {
     _clockInOut = ApiRequests.getEmployeeCurrentStatus();
+    _isExplanationLetter = ApiRequests.getIsExplanationLetter();
     super.initState();
   }
 
@@ -40,6 +42,34 @@ class _MainPageState extends State<MainPage> {
       (Timer timer) => setState(() {
         _start = _start + oneSec;
         },
+      ),
+    );
+  }
+
+  Widget getExplanationLetterButton(AsyncSnapshot snapshot) {    
+    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) { 
+      return buildExplanationLetterButton(snapshot.data);
+    }
+    else {
+      return Container (height: 100,);
+    }
+  }
+
+  Widget buildExplanationLetterButton(bool isExplanationLetter) {
+    return Center(
+      child: GestureDetector(
+        onTap: () => Routes.navigateTo(context, 'explanationLetter'),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50.0),
+          child: Container(
+            color: Colors.red,
+            height: 100.0,
+            width: 200.0,
+            child: Center(
+              child: Text('Написать объяснительную'),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -104,9 +134,25 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _clockInOut,
-      builder: (context, snapshot) => getClockInOutButton(snapshot),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 150,
+          child: FutureBuilder(
+            future: _isExplanationLetter,
+            builder: (context, snapshot) => getExplanationLetterButton(snapshot),
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future: _clockInOut,
+            builder: (context, snapshot) => getClockInOutButton(snapshot),
+          ),
+        ),
+        Container(
+          height: 150,
+        )
+      ],
     );
   }
 }
