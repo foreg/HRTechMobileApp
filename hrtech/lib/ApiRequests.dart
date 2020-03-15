@@ -82,16 +82,27 @@ class ApiRequests {
     return response;
   }
 
-  static Future<PayStats> getEmployeePayStats() async {
-    PayStats cachedResponse = Cache.get('getEmployeePayStats');
+  static Future<PayStats> getEmployeePayStats(String step, DateTime startDate) async {
+    String startDateString = startDate.toIso8601String();
+    String request = 'getEmployeePayStats' + '?' + 'step=$step&startDate=$startDateString';
+    var date;
+    switch (step) {
+      case 'month':
+        date = startDate.year.toString() + '-' +  startDate.month.toString();
+        break;
+      default: 
+        date = startDate.year.toString();
+    }
+    String cacheKey = 'getEmployeeWorkTime' + '?' + 'step=$step&startDate=$date';
+    PayStats cachedResponse = Cache.get(cacheKey);
     if (cachedResponse != null) {
       return cachedResponse;
     }
-    final response = await http.get(host + 'getEmployeePayStats', headers: {
+    final response = await http.get(host + request, headers: {
       'Authorization': 'Bearer $token',
     });
     PayStats payStats = PayStats.fromJson(json.decode(response.body)['data']);
-    Cache.add('getEmployeePayStats', payStats);
+    Cache.add(cacheKey, payStats);
     return payStats;
   }
 

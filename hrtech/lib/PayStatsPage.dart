@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hrtech/ApiRequests.dart';
 import 'package:hrtech/models/PayStats.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PayStatsPage extends StatefulWidget {
   @override
@@ -9,14 +10,15 @@ class PayStatsPage extends StatefulWidget {
 
 class _PayStatsPageState extends State<PayStatsPage> {
   Future<PayStats> _payStats;
+  PayStats _payStatsData;
 
   @override
   void initState() {
     super.initState();
-    _payStats = ApiRequests.getEmployeePayStats();
+    _payStats = ApiRequests.getEmployeePayStats('month', DateTime(2020, 2, 20));
   }
 
-  _buildTextInfo(BuildContext context, AsyncSnapshot<PayStats> asyncSnapshot) {
+  _buildTextInfo(BuildContext context, PayStats data) {
     return Expanded(
       flex: 5,
       child: Padding(
@@ -32,7 +34,11 @@ class _PayStatsPageState extends State<PayStatsPage> {
                   Expanded(
                     child: Text('Часов отработано:')
                     ),
-                  Text('123.45')
+                  data == null ? Shimmer.fromColors(
+                    baseColor: Colors.grey,
+                    highlightColor: Colors.white,
+                    child: Text('123.45'),
+                  ) : Text(data.workHours.toString())
                 ],
               ),
             ),
@@ -44,7 +50,11 @@ class _PayStatsPageState extends State<PayStatsPage> {
                   Expanded(
                     child: Text('Рабочих часов:')
                     ),
-                  Text('123.45')
+                  data == null ? Shimmer.fromColors(
+                    baseColor: Colors.grey,
+                    highlightColor: Colors.white,
+                    child: Text('123.45'),
+                  ) : Text(data.totalHours.toString())
                 ],
               ),
             ),
@@ -56,7 +66,11 @@ class _PayStatsPageState extends State<PayStatsPage> {
                   Expanded(
                     child: Text('Оклад:')
                     ),
-                  Text('123.45')
+                  data == null ? Shimmer.fromColors(
+                    baseColor: Colors.grey,
+                    highlightColor: Colors.white,
+                    child: Text('123.45'),
+                  ) : Text(data.salary.toString())
                 ],
               ),
             ),
@@ -68,7 +82,11 @@ class _PayStatsPageState extends State<PayStatsPage> {
                   Expanded(
                     child: Text('Итого:')
                     ),
-                  Text('123.45')
+                  data == null ? Shimmer.fromColors(
+                    baseColor: Colors.grey,
+                    highlightColor: Colors.white,
+                    child: Text('123.45'),
+                  ) : Text(data.pay.toString())
                 ],
               ),
             ),
@@ -83,9 +101,12 @@ class _PayStatsPageState extends State<PayStatsPage> {
   }
 
   Column buildPage(BuildContext context, AsyncSnapshot<PayStats> asyncSnapshot) {
+    if (asyncSnapshot.connectionState == ConnectionState.done && asyncSnapshot.hasData) {
+      _payStatsData = asyncSnapshot.data;
+    }
     return Column(
     children: <Widget>[
-      _buildTextInfo(context, asyncSnapshot),
+      _buildTextInfo(context, _payStatsData),
       Expanded(
         flex: 13,
         child: Container(color: Colors.red)

@@ -3,6 +3,7 @@ import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
 import 'package:hrtech/MainPage.dart';
 import 'package:hrtech/PayStatsPage.dart';
+import 'package:hrtech/Themes.dart';
 import 'package:hrtech/WorkTime.dart';
 
 
@@ -29,7 +30,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fancy Bottom Navigation"),
+        textTheme: CustomTextThemes.mainTheme,
+        title: Text("HR Tech"),
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
@@ -41,7 +43,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         initialSelection: 1,
         tabs: [
           TabData(iconData: Icons.home, title: "Home"),
-          TabData(iconData: Icons.search, title: "Search"),
+          TabData(iconData: Icons.home, title: "Главная"),
           TabData(iconData: Icons.shopping_cart, title: "Basket")
         ],
         onTabChangedListener: (position) {

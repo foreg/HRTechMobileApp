@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'package:hrtech/Themes.dart';
 import 'package:hrtech/utils.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
@@ -93,12 +94,15 @@ class _MainPageState extends State<MainPage> {
       child: GestureDetector(
         onTap: () => _onTap(),
         child: ClipOval(
-          child: Container(
-            color: (clockInOut != null && clockInOut.type) ? Colors.green : Colors.red,
-            height: 200.0,
-            width: 200.0,
-            child: Center(
-              child: clockInOut == null ? Container() : getButtonText(clockInOut)
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: (clockInOut != null && clockInOut.type) ? CustomColors.mainButtonColor : CustomColors.mainButtonProgress,
+              // height: 200.0,
+              // width: 200.0,
+              child: Center(
+                child: clockInOut == null ? Container() : getButtonText(clockInOut)
+              ),
             ),
           ),
         ),
@@ -115,7 +119,10 @@ class _MainPageState extends State<MainPage> {
       return Text(printDuration(_start));
     }
     else {
-      return Text('Начать работать');
+      return Icon(
+        Icons.play_arrow, 
+        color: CustomColors.mainButtonColor,
+        size: 140,);
     }
   }
 
