@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:hrtech/Themes.dart';
 import 'package:hrtech/WorkTimeChart.dart';
 
 class WorkTime extends StatefulWidget {
@@ -18,20 +19,25 @@ class _WorkTimeState extends State<WorkTime> {
   }
 
 
-  CarouselSlider buildCarouselSlider(BuildContext context) {
-    return CarouselSlider.builder(
-      enableInfiniteScroll: false,
-      aspectRatio: 1.0,
-      itemCount: 15,
-      reverse: true,
-      
-      viewportFraction: 1.0,
-      itemBuilder: (BuildContext context, int itemIndex) => _buildPage(context, itemIndex),
-      onPageChanged: (index) {
-        setState(() {
-          _current = index;
-        });
-      },
+  Widget buildCarouselSlider(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Expanded(
+      flex: 1,
+      child: CarouselSlider.builder(
+        height: double.infinity,
+        enableInfiniteScroll: false,
+        // aspectRatio:  size.width / (size.height - 150-50-50), // 105 - высота нижнего меню, 50 - отступ с 2 сторон
+        itemCount: 15,
+        reverse: true,
+        
+        viewportFraction: 1.0,
+        itemBuilder: (BuildContext context, int itemIndex) => _buildPage(context, itemIndex),
+        onPageChanged: (index) {
+          setState(() {
+            _current = index;
+          });
+        },
+      ),
     );
   }
 
@@ -43,10 +49,7 @@ class _WorkTimeState extends State<WorkTime> {
       case 2: step = 'week'; break;
       case 1: step = 'month'; break;
     }
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: WorkTimeChart(itemIndex: itemIndex, step: step),
-    );
+    return WorkTimeChart(itemIndex: itemIndex, step: step);
   }
 
   Row buildDots() {
@@ -67,26 +70,56 @@ class _WorkTimeState extends State<WorkTime> {
   }
 
   Widget buildStepPicker() {
+    var size = MediaQuery.of(context).size;
     return Align(
-      alignment: Alignment.centerRight,
-      child: ToggleButtons(
-        children: <Widget>[
-          Text('Год'),
-          Text('Месяц'),
-          Text('Неделя'),
-        ], 
-        onPressed: (int index) {
-          setState(() {
-            for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-              if (buttonIndex == index) {
-                isSelected[buttonIndex] = true;
-              } else {
-                isSelected[buttonIndex] = false;
+      heightFactor: 1.0,
+      alignment: Alignment.center,
+      child: Container(
+        // color: CustomColors.secondaryColor,
+        decoration: BoxDecoration(
+          color: CustomColors.secondaryColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0), 
+            topRight: Radius.circular(20.0)
+          )
+        ),
+        child: ToggleButtons(
+          borderWidth: 1,
+          borderColor: CustomColors.backgroundColor,
+          selectedBorderColor: CustomColors.backgroundColor,
+          selectedColor: CustomColors.backgroundColor,
+          fillColor: CustomColors.primaryColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0), 
+            topRight: Radius.circular(20.0)
+          ),
+          children: <Widget>[
+            Container(
+              width: (size.width - 4) / 3,
+              child: Center(child: Text('Год', style: CustomTextStyles.bodyText18,))
+            ),
+            Container(
+              width: (size.width - 4) / 3,
+              child: Center(child: Text('Месяц', style: CustomTextStyles.bodyText18,))
+            ),
+            Container(
+              width: (size.width - 4) / 3,
+              child: Center(child: Text('Неделя', style: CustomTextStyles.bodyText18,))
+            ),
+          ], 
+          onPressed: (int index) {
+            setState(() {
+              for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                if (buttonIndex == index) {
+                  isSelected[buttonIndex] = true;
+                } else {
+                  isSelected[buttonIndex] = false;
+                }
               }
-            }
-          });
-        },
-        isSelected: isSelected,
+            });
+          },
+          isSelected: isSelected,
+        ),
       ),
     );
   }
@@ -94,10 +127,16 @@ class _WorkTimeState extends State<WorkTime> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        const SizedBox(
+          height: 50,
+        ),
         buildStepPicker(),
         buildCarouselSlider(context),
+        const SizedBox(
+          height: 75,
+        ),
         //buildDots()
       ],
     );

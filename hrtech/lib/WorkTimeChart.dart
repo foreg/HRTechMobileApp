@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hrtech/ApiRequests.dart';
 import 'package:hrtech/ChartCard.dart';
 import 'package:hrtech/Preloader.dart';
+import 'package:hrtech/Themes.dart';
 import 'package:hrtech/models/EmployeeWorkTime.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -26,7 +27,6 @@ class WorkTimeChartState extends State<WorkTimeChart> {
   final List<double> placeholderDataYear = [136,152,168, 175, 135, 167, 184, 168, 176, 176, 159, 183];
   final List<String> weekNamesAbbr = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
   final List<String> monthNamesAbbr = ['Я','Ф','М','А','М','И','И','А','С','О','Н','Д'];
-  final Color barBackgroundColor = const Color(0xff72d8bf);
   final Duration animDuration = Duration(milliseconds: 250);
   final dateUtility = DateUtil();
 
@@ -107,14 +107,14 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         ),
       );
     }
-    return ChartCard(catdTitle: catdTitle, child: child);
+    return ChartCard(cardTitle: catdTitle, child: child, cardSubTitle: 'График рабочего времени',);
   }
 
   BarChartGroupData makeGroupData(
     int x,
     double y, {
     bool isTouched = false,
-    Color barColor = Colors.white,
+    Color barColor = CustomColors.primaryColor,
     double width = 22,
     List<int> showTooltips = const [],
   }) {
@@ -123,12 +123,12 @@ class WorkTimeChartState extends State<WorkTimeChart> {
       barRods: [
         BarChartRodData(
           y: y,
-          color: isTouched ? Colors.yellow : barColor,
+          color: isTouched ? CustomColors.primaryColorAccent : barColor,
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             y: 10,
-            color: barBackgroundColor,
+            color: CustomColors.backgroundColor,
           ),
         ),
       ],
@@ -174,10 +174,10 @@ class WorkTimeChartState extends State<WorkTimeChart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
+          tooltipBgColor: CustomColors.primaryColor,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             return BarTooltipItem(
-              (rod.y).toString(), TextStyle(color: Colors.yellow));
+              (rod.y).toString(), CustomTextStyles.bodyText18);
           }
         ),
         touchCallback: (barTouchResponse) {
@@ -197,7 +197,7 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         bottomTitles: SideTitles(
           // rotateAngle: rotateAngle,
           showTitles: true,
-          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          textStyle: CustomTextStyles.bodyText18Bold,
           margin: 16,
           getTitles: (double value) {
             switch (widget.step) {
@@ -217,9 +217,9 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          textStyle: TextStyle( color: const Color(0xff7589a2), fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: CustomTextStyles.bodyText18,
           margin: 16,
-          reservedSize: 14,
+          // reservedSize: 14,
           getTitles: (value) {
             return value.toInt().toString();
           },

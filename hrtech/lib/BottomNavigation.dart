@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'package:hrtech/CustomIcons.dart';
 
 import 'package:hrtech/MainPage.dart';
 import 'package:hrtech/PayStatsPage.dart';
@@ -29,22 +30,26 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        textTheme: CustomTextThemes.mainTheme,
-        title: Text("HR Tech"),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Center(
-          child: _getPage(currentPage),
+      backgroundColor: CustomColors.backgroundColor,
+      body: SafeArea(
+        child: Container(
+          child: Center(
+            child: _getPage(currentPage),
+          ),
         ),
       ),
       bottomNavigationBar: FancyBottomNavigation(
+        activeIconColor: CustomColors.backgroundColor,
+        inactiveIconColor: CustomColors.backgroundColor,
+        circleColor: CustomColors.primaryColor,
+        barBackgroundColor: CustomColors.secondaryColor,
+        textColor: CustomColors.backgroundColor,
+
         initialSelection: 1,
         tabs: [
-          TabData(iconData: Icons.home, title: "Home"),
-          TabData(iconData: Icons.home, title: "Главная"),
-          TabData(iconData: Icons.shopping_cart, title: "Basket")
+          TabData(iconData: CustomIcons.bar_chart, title: "Рабочее время"),
+          TabData(iconData: CustomIcons.clock, title: "Главная"),
+          TabData(iconData: CustomIcons.ruble, title: "История выплат")
         ],
         onTabChangedListener: (position) {
           setState(() {

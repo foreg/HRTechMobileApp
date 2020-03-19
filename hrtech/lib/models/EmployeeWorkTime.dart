@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class EmployeeWorkTime {
   final Map<dynamic, double> data;
 
@@ -9,9 +11,9 @@ class EmployeeWorkTime {
         json.forEach((k,v) {
         DateTime date = DateTime.tryParse(k);
         if (date == null)
-          _data[k] = v;
+          _data[k] = double.parse(v);
         else
-          _data[date] = v;
+          _data[date] = double.parse(v);
       });
     }    
     return EmployeeWorkTime(data: _data);

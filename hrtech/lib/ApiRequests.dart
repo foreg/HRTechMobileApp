@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 
 class ApiRequests {
   static final String host = 'https://hr-tech-api.herokuapp.com/api/v1/';
+  // static final String host = 'http://10.0.2.2:5000/api/v1/';
 
   static String token = 'e8vZeEiMFdygHGuUA0HznzuZw7AzsnOj';
 
@@ -26,7 +27,8 @@ class ApiRequests {
   }
 
   static Future<void> addClockInOut() async {
-    Cache.remove('getEmployeeCurrentStatus');
+    // Cache.remove('getEmployeeCurrentStatus');
+    Cache.clear();
     var response = await http.post(host + 'clockInOuts', headers: {
       'Authorization': 'Bearer $token',
     });
@@ -62,13 +64,26 @@ class ApiRequests {
   }
 
   static Future<bool> getIsExplanationLetter() async {
-    await Future.delayed(Duration(seconds: 2)); // TODO remove this line
-    return true;
+    final response = await http.get(host + 'getIsExplanationLetter', headers: {
+      'Authorization': 'Bearer $token',
+    });
+    return json.decode(response.body)['data'];
   }
 
   static Future<List<Reason>> getReasons() async {
-    await Future.delayed(Duration(seconds: 2)); // TODO remove this line
-    return [Reason(id: 1, name: 'первая'), Reason(id: 2, name: 'вторая'),];
+    List<Reason> cachedResponse = Cache.get('getReasons');
+    if (cachedResponse != null) {
+      return cachedResponse;
+    }
+    final response = await http.get(host + 'reasons?per_page=100', headers: {
+      'Authorization': 'Bearer $token',
+    });
+    List<Reason> reasons = new List<Reason>();
+    for (var item in json.decode(response.body)['data']['items']) {
+      reasons.add(Reason.fromJson(item));
+    }
+    Cache.add('getReasons', reasons);
+    return reasons;
   }
 
   static Future<void> addExplanationLetter(String description, int reasonId) async {
@@ -93,7 +108,7 @@ class ApiRequests {
       default: 
         date = startDate.year.toString();
     }
-    String cacheKey = 'getEmployeeWorkTime' + '?' + 'step=$step&startDate=$date';
+    String cacheKey = 'getEmployeePayStats' + '?' + 'step=$step&startDate=$date';
     PayStats cachedResponse = Cache.get(cacheKey);
     if (cachedResponse != null) {
       return cachedResponse;
@@ -106,12 +121,20 @@ class ApiRequests {
     return payStats;
   }
 
-  // static void getToken() async {
-  //   final response = await http.post(host + 'tokens', headers: {
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json',
-  //     'Authorization': 'Authorization Basic SXZhbm92SUk6MTIzNDU2',
-  //   });
-  //   token = json.decode(response.body)['data']['token'];
-  // }
+  static Future<bool> getToken(String username, String password) async {
+    String credentials = "$username:$password";
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(credentials);
+    final response = await http.post(host + 'tokens', headers: {
+      // 'Content-Type': 'application/json',
+      // 'Accept': 'application/json',
+      'Authorization': 'Basic $encoded',
+    });
+    var res = json.decode(response.body);
+    if (res['status'] == false) {
+      return false;
+    }
+    token = res['data']['token'];
+    return true;
+  }
 }

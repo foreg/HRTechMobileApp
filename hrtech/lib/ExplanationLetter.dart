@@ -4,6 +4,7 @@ import 'package:direct_select_flutter/direct_select_list.dart';
 import 'package:flutter/material.dart';
 import 'package:hrtech/ApiRequests.dart';
 import 'package:hrtech/Routes.dart';
+import 'package:hrtech/Themes.dart';
 import 'package:hrtech/models/Reason.dart';
 
 class ExplanationLetter extends StatefulWidget {
@@ -35,7 +36,7 @@ class _ExplanationLetterState extends State<ExplanationLetter> {
         itemHeight: 56,
         value: value,
         itemBuilder: (context, value) {
-          return Text(value);
+          return Text(value, style: CustomTextStyles.bodyText18,);
         });
   }
 
@@ -72,105 +73,109 @@ class _ExplanationLetterState extends State<ExplanationLetter> {
       key: directSelectContainerKey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(25.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             verticalDirection: VerticalDirection.down,
             children: <Widget>[
-              SizedBox(height: 20.0),
+              // SizedBox(height: 20.0),
               Container(
-                padding: const EdgeInsets.only(left: 8.0),
+                // padding: const EdgeInsets.only(left: 8.0),
                 alignment: AlignmentDirectional.centerStart,
-                margin: EdgeInsets.only(left: 4),
+                // margin: EdgeInsets.only(left: 4),
                 child: Column(
                   children: <Widget>[
-                    Text('Создание объяснительной',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold))
+                    Text('Создание объяснительной', style: CustomTextStyles.headerText26White)
                   ],
                 )
               ),
               SizedBox(height: 40.0),
               Container(
-                padding: const EdgeInsets.only(left: 8.0),
+                // padding: const EdgeInsets.only(left: 8.0),
                 alignment: AlignmentDirectional.centerStart,
-                margin: EdgeInsets.only(left: 4),
-                child: Text('Выберите причину:')
+                // margin: EdgeInsets.only(left: 4),
+                child: Text('Выберите причину:', style: CustomTextStyles.bodyText18White,)
               ),
-              // SizedBox(height: 5.0),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                      child: Container(
-                        // decoration: _getShadowDecoration(),
-                        child: Card(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Expanded(
-                                child: Padding(
-                                  child: DirectSelectList<String>(
-                                    key: ValueKey(new DateTime.now()),
-                                    values: data == null ? ['Список причин загружается..'] : data,
-                                    defaultItemIndex: selectedReason,
-                                    itemBuilder: (String value) => _getDropDownMenuItem(value),
-                                    focusedItemDecoration: _getDslDecoration(),
-                                    onItemSelectedListener: (item, index, context) {
-                                      setState(() {
-                                        selectedReason = index;
-                                      });
-                                    },
-                                    onUserTappedListener: () => _showHint(),
-                                    ),
-                                  padding: EdgeInsets.only(left: 22))
-                                ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 8),
-                                child: Icon(Icons.arrow_drop_down),
-                              )
-                            ],
-                          )
+              SizedBox(height: 8.0),
+              Container(
+                // decoration: _getShadowDecoration(),
+                child: Card(
+                  color: CustomColors.secondaryColor,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Expanded(
+                        child: Padding(
+                          child: DirectSelectList<String>(
+                            key: ValueKey(new DateTime.now()),
+                            values: data == null ? ['Список причин загружается..'] : data,
+                            defaultItemIndex: selectedReason,
+                            itemBuilder: (String value) => _getDropDownMenuItem(value),
+                            focusedItemDecoration: _getDslDecoration(),
+                            onItemSelectedListener: (item, index, context) {
+                              setState(() {
+                                selectedReason = index;
+                              });
+                            },
+                            onUserTappedListener: () => _showHint(),
+                            ),
+                          padding: EdgeInsets.only(left: 22))
                         ),
-                      ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Icon(Icons.arrow_drop_down, color: CustomColors.backgroundColor,),
+                      )
+                    ],
+                  )
                 ),
               ),
+              SizedBox(height: 8.0),
               Container(
-                padding: const EdgeInsets.only(left: 8.0),
+                // padding: const EdgeInsets.only(left: 8.0),
                 alignment: AlignmentDirectional.centerStart,
-                margin: EdgeInsets.only(left: 4),
-                child: Text('Опишите подробнее:')
+                // margin: EdgeInsets.only(left: 4),
+                child: Text('Опишите подробнее:', style: CustomTextStyles.bodyText18White,)
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 8.0),
               Container(
-                padding: const EdgeInsets.only(left: 8.0, right: 12.0),
+                // padding: const EdgeInsets.only(left: 8.0, right: 12.0),
                 alignment: AlignmentDirectional.centerStart,
-                margin: EdgeInsets.only(left: 4),
+                // margin: EdgeInsets.only(left: 4),
                 child: TextField(
                   controller: myController,
                   decoration: InputDecoration(
+                    border: new UnderlineInputBorder(
+                      borderSide: new BorderSide(
+                        color: CustomColors.primaryColor
+                      )
+                    ),
+                    focusedBorder: new UnderlineInputBorder(
+                      borderSide: new BorderSide(
+                        width: 2,
+                        color: CustomColors.primaryColor
+                      )
+                    ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: CustomColors.secondaryColor,
                     // border: InputBorder.none,
                   ),
+                  style: CustomTextStyles.bodyText18,
+                  cursorColor: CustomColors.primaryColor,
                   keyboardType: TextInputType.multiline,
-                  maxLines: 3,
+                  maxLines: 13,
                 )
               ),
-              SizedBox(height: 60.0),
+              SizedBox(height: 50.0),
               GestureDetector(
                 onTap: () => _send(context),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50.0),
                   child: Container(
-                    color: Colors.green,
-                    height: 100.0,
-                    width: 100.0,
+                    color: CustomColors.primaryColor,
+                    height: 70,
+                    width: MediaQuery.of(context).size.width - 50,
                     child: Center(
-                      child: Icon(Icons.send, size: 40,),
+                      child: Text('Написать объяснительную', style: CustomTextStyles.bodyText20Bold,),
                     ),
                   ),
                 ),
@@ -185,8 +190,17 @@ class _ExplanationLetterState extends State<ExplanationLetter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.backgroundColor,
       key: scaffoldKey,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleSpacing: 0.0,
+        title: new Text('Назад', style: CustomTextStyles.bodyText20,),
+        backgroundColor: CustomColors.secondaryColor,
+      ),
       body: FutureBuilder(
         future: _reasons,
         builder: (context, snapshot) => buildDirectSelectContainer(context, snapshot)),

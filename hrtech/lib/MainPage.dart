@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'package:hrtech/CustomTimer.dart';
 import 'package:hrtech/Themes.dart';
 import 'package:hrtech/utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -47,27 +48,27 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget getExplanationLetterButton(AsyncSnapshot snapshot) {    
-    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) { 
-      return buildExplanationLetterButton(snapshot.data);
+  Widget getExplanationLetterButton(BuildContext context, AsyncSnapshot snapshot) {    
+    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data) { 
+      return buildExplanationLetterButton(context, snapshot.data);
     }
     else {
-      return Container (height: 100,);
+      return Container (height: 70,);
     }
   }
 
-  Widget buildExplanationLetterButton(bool isExplanationLetter) {
+  Widget buildExplanationLetterButton(BuildContext context, bool isExplanationLetter) {
     return Center(
       child: GestureDetector(
         onTap: () => Routes.navigateTo(context, 'explanationLetter'),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50.0),
           child: Container(
-            color: Colors.red,
-            height: 100.0,
-            width: 200.0,
+            color: CustomColors.primaryColor,
+            height: 70,
+            width: MediaQuery.of(context).size.width - 50,
             child: Center(
-              child: Text('Написать объяснительную'),
+              child: Text('Написать объяснительную', style: CustomTextStyles.bodyText20Bold,),
             ),
           ),
         ),
@@ -75,38 +76,40 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget getClockInOutButton(AsyncSnapshot snapshot) {    
+  Widget getClockInOutButton(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) { 
-      return buildClockInOutButton(snapshot.data);
+      return buildClockInOutButton(context, snapshot.data);
     }
     else {
       return Shimmer.fromColors(
-        baseColor: Colors.red,
-        highlightColor: Colors.green,
+        baseColor: CustomColors.secondaryColor,
+        highlightColor: CustomColors.primaryColor,
         // period: Duration(seconds: 1),
-        child: buildClockInOutButton(null),
+        child: buildClockInOutButton(context, null),
       );
     }
   }
 
-  Widget buildClockInOutButton(ClockInOut clockInOut) {
+  Widget buildClockInOutButton(BuildContext context, ClockInOut clockInOut) {
     return Center(
-      child: GestureDetector(
-        onTap: () => _onTap(),
-        child: ClipOval(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: (clockInOut != null && clockInOut.type) ? CustomColors.mainButtonColor : CustomColors.mainButtonProgress,
-              // height: 200.0,
-              // width: 200.0,
-              child: Center(
-                child: clockInOut == null ? Container() : getButtonText(clockInOut)
-              ),
-            ),
-          ),
-        ),
-      ),
+      // child: GestureDetector(
+      //   onTap: () => _onTap(),
+      //   child: 
+        child: CustomTimer(clockInOut: clockInOut, onTapCallback: _onTap,),
+        // child: ClipOval(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Container(
+        //       color: (clockInOut != null && clockInOut.type) ? CustomColors.mainButtonColor : CustomColors.mainButtonProgress,
+        //       // height: 200.0,
+        //       // width: 200.0,
+        //       child: Center(
+        //         child: clockInOut == null ? Container() : getButtonText(clockInOut)
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      // ),
     );
   }
 
@@ -127,10 +130,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _onTap() {
-    if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
-    }
+    // if (_timer != null) {
+    //   _timer.cancel();
+    //   _timer = null;
+    // }
     ApiRequests.addClockInOut().then((_) => {
       setState(() {        
         _clockInOut = ApiRequests.getEmployeeCurrentStatus();
@@ -143,17 +146,23 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        SizedBox(
+          height: 50,
+        ),
         Container(
-          height: 150,
+          height: 70,
           child: FutureBuilder(
             future: _isExplanationLetter,
-            builder: (context, snapshot) => getExplanationLetterButton(snapshot),
+            builder: (context, snapshot) => getExplanationLetterButton(context, snapshot),
           ),
+        ),
+        SizedBox(
+          height: 30,
         ),
         Expanded(
           child: FutureBuilder(
             future: _clockInOut,
-            builder: (context, snapshot) => getClockInOutButton(snapshot),
+            builder: (context, snapshot) => getClockInOutButton(context, snapshot),
           ),
         ),
         Container(

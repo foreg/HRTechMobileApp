@@ -27,4 +27,8 @@ class Cache {
   static void remove(String key) {
     _cache.remove(key);
   }
+
+  static void clear() {
+    _cache.clear();
+  }
 }
