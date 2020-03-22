@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hrtech/ApiRequests.dart';
@@ -17,6 +18,7 @@ class _PayStatsPageState extends State<PayStatsPage> {
   int _current = 0;
   List<bool> isSelected;
   bool updated = false;
+  var textInfoGroup = AutoSizeGroup();
 
   @override
   void initState() {
@@ -41,68 +43,80 @@ class _PayStatsPageState extends State<PayStatsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[                            
-                  Expanded(
-                    child: Text('Часов отработано:', style: CustomTextStyles.bodyText18White)
-                    ),
-                  _payStatsData == null ? Shimmer.fromColors(
-                    baseColor: Colors.grey,
-                    highlightColor: Colors.white,
-                    child: Text('123.45', style: CustomTextStyles.bodyText18White),
-                  ) : Text(_payStatsData.workHours.toString(), style: CustomTextStyles.bodyText18White)
-                ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[                            
+                    Expanded(
+                      child: AutoSizeText('Часов отработано:', style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                      ),
+                    _payStatsData == null ? Shimmer.fromColors(
+                      baseColor: Colors.grey,
+                      highlightColor: Colors.white,
+                      child: AutoSizeText('123.45', style: CustomTextStyles.bodyText18White, group: textInfoGroup,),
+                    ) : AutoSizeText(_payStatsData.workHours.toString(), style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[                            
-                  Expanded(
-                    child: Text('Рабочих часов:', style: CustomTextStyles.bodyText18White)
-                    ),
-                  _payStatsData == null ? Shimmer.fromColors(
-                    baseColor: Colors.grey,
-                    highlightColor: Colors.white,
-                    child: Text('123.45', style: CustomTextStyles.bodyText18White),
-                  ) : Text(_payStatsData.totalHours.toString(), style: CustomTextStyles.bodyText18White)
-                ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[                            
+                    Expanded(
+                      child: AutoSizeText('Рабочих часов:', style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                      ),
+                    _payStatsData == null ? Shimmer.fromColors(
+                      baseColor: Colors.grey,
+                      highlightColor: Colors.white,
+                      child: AutoSizeText('123.45', style: CustomTextStyles.bodyText18White, group: textInfoGroup,),
+                    ) : AutoSizeText(_payStatsData.totalHours.toString(), style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[                            
-                  Expanded(
-                    child: Text('Оклад:', style: CustomTextStyles.bodyText18White)
-                    ),
-                  _payStatsData == null ? Shimmer.fromColors(
-                    baseColor: Colors.grey,
-                    highlightColor: Colors.white,
-                    child: Text('123.45', style: CustomTextStyles.bodyText18White),
-                  ) : Text(_payStatsData.salary.toString(), style: CustomTextStyles.bodyText18White)
-                ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[                            
+                    Expanded(
+                      child: AutoSizeText('Оклад:', style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                      ),
+                    _payStatsData == null ? Shimmer.fromColors(
+                      baseColor: Colors.grey,
+                      highlightColor: Colors.white,
+                      child: AutoSizeText('123.45', style: CustomTextStyles.bodyText18White, group: textInfoGroup,),
+                    ) : AutoSizeText(_payStatsData.salary.toString(), style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[                            
-                  Expanded(
-                    child: Text('Итого:', style: CustomTextStyles.bodyText18White)
-                    ),
-                  _payStatsData == null ? Shimmer.fromColors(
-                    baseColor: Colors.grey,
-                    highlightColor: Colors.white,
-                    child: Text('123.45', style: CustomTextStyles.bodyText18White),
-                  ) : Text(_payStatsData.pay.toString(), style: CustomTextStyles.bodyText18White)
-                ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[                            
+                    Expanded(
+                      child: AutoSizeText('Итого:', style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                      ),
+                    _payStatsData == null ? Shimmer.fromColors(
+                      baseColor: Colors.grey,
+                      highlightColor: Colors.white,
+                      child: AutoSizeText('123.45', style: CustomTextStyles.bodyText18White, group: textInfoGroup,),
+                    ) : AutoSizeText(_payStatsData.pay.toString(), style: CustomTextStyles.bodyText18White, group: textInfoGroup,)
+                  ],
+                ),
               ),
             ),
           ],

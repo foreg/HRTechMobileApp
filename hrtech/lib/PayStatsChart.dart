@@ -33,6 +33,7 @@ class PayStatsChartState extends State<PayStatsChart> {
   final List<String> monthNamesAbbr = ['Я','Ф','М','А','М','И','И','А','С','О','Н','Д'];
   final Duration animDuration = Duration(milliseconds: 250);
   final dateUtility = DateUtil();
+  GlobalKey stickyKey = GlobalKey();
 
   double intervalY;
   double rotateAngle;
@@ -204,7 +205,7 @@ class PayStatsChartState extends State<PayStatsChart> {
             color: CustomColors.primaryColorAccent,
             value: payStats.totalHours - payStats.workHours,
             title: isTouched ? (payStats.totalHours - payStats.workHours).toString() + ' ч.':
-              (100 - payStats.workHours / payStats.totalHours * 100).toStringAsPrecision(2) + '%',
+              (100 - payStats.workHours / payStats.totalHours * 100).toStringAsPrecision(3) + '%',
             radius: radius,
             titleStyle: isTouched ? CustomTextStyles.bodyText20Bold : CustomTextStyles.bodyText18Bold
           );
@@ -213,7 +214,7 @@ class PayStatsChartState extends State<PayStatsChart> {
             color: CustomColors.primaryColor,
             value: payStats.workHours,
             title: isTouched ? payStats.workHours.toString() + ' ч.':
-              (payStats.workHours / payStats.totalHours * 100).toStringAsPrecision(2) + '%',
+              (payStats.workHours / payStats.totalHours * 100).toStringAsPrecision(3) + '%',
             radius: radius,
             titleStyle: isTouched ? CustomTextStyles.bodyText20Bold : CustomTextStyles.bodyText18Bold
           );
@@ -226,6 +227,7 @@ class PayStatsChartState extends State<PayStatsChart> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      key: stickyKey,
       future: _employeePayStats,
       builder: (context, snapshot) => buildChart(snapshot),
     );

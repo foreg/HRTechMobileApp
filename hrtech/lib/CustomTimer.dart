@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hrtech/CustomTimerPainter.dart';
 import 'package:hrtech/Themes.dart';
@@ -122,7 +123,10 @@ class _CustomTimerState extends State<CustomTimer>
       controller.forward(from: controller.value);
       return Text(timerString, style: CustomTextStyles.headerText96Inversed);
     }
-    return Text('Начать работать', style: CustomTextStyles.headerText36Inversed);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: AutoSizeText('Начать работать', style: CustomTextStyles.headerText36Inversed, maxLines: 1,),
+    );
   }
 }
 

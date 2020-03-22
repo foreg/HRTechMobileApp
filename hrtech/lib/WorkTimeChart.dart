@@ -23,7 +23,7 @@ class WorkTimeChart extends StatefulWidget {
 }
 
 class WorkTimeChartState extends State<WorkTimeChart> {
-  final List<double> placeholderData = [7,8,7,6,8,8,6,7,8,7,7,8,7,6,8,8,6,7,8,7,7,8,7,6,8,8,6,7,8,7,6,8];
+  final List<double> placeholderData = [7,8,7,6,8,8,6,7,8,7,7,8,7,6,8,8,6,7,8,7,7,8,7,6,8,8,6,7,8,7,6,8,9];
   final List<double> placeholderDataYear = [136,152,168, 175, 135, 167, 184, 168, 176, 176, 159, 183];
   final List<String> weekNamesAbbr = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
   final List<String> monthNamesAbbr = ['Я','Ф','М','А','М','И','И','А','С','О','Н','Д'];
@@ -153,14 +153,14 @@ class WorkTimeChartState extends State<WorkTimeChart> {
         columnsCount = dateUtility.daysInMonth(rangeStart.month, rangeStart.year);
         list = List<double>.generate(columnsCount, (i) => employeeWorkTime == null ? placeholderData[i] : 0.0);
         employeeWorkTime?.data?.forEach((k,v) {
-          list[int.parse(k)] = v;
+          list[int.parse(k)-1] = v;
         });
         break;
       case 'year':
         columnsCount = 12;
         list = List<double>.generate(columnsCount, (i) => employeeWorkTime == null ? placeholderDataYear[i] : 0.0);
         employeeWorkTime?.data?.forEach((k,v) {
-          list[int.parse(k)] = v;
+          list[int.parse(k)-1] = v;
         });
         break;
     }
